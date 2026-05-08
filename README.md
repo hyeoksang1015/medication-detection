@@ -33,45 +33,23 @@
 
 -data	데이터 창고 >> csv 파일 넣는 
 
-예시 >> 
-
-data/
-├── train.csv
-├── test.csv
-└── sample_submission.csv
 
 
 
 -notebooks	코랩/ipynb >> 분석/실험용 ipynb 파일 넣는 곳
 
-예시 >>
 
-notebooks/
-├── 01_EDA.ipynb
-├── 02_Preprocessing.ipynb
-└── 03_Modeling.ipynb
 
 
 
 -src	전처리/모델 코드 >> 재사용할 코드 저장하는 곳 / 코랩만 사용하면 코드 관리가 어렵기 때문에 중요한 코드 따로 빼는 거임
 
-예시 >> 
-
-src/
-├── preprocess.py
-├── train.py
-└── predict.py
 
 
 
 
 -models	저장 모델 >> 학습 끝난 AI 저장
 
-예시 >> 
-
-models/
-├── model_v1.pkl
-└── model_v2.pkl
 
 
 
@@ -83,9 +61,4 @@ models/
 
 -results	결과 이미지/CSV >> 결과 저장 / 그래프, csv 예측 결과, 발표자료용 이미지 등
 
-예시 >> 
 
-results/
-├── confusion_matrix.png
-├── score.csv
-└── feature_importance.png
