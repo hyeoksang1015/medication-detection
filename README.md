@@ -1,4 +1,4 @@
-# Bank Detection project
+# medication Detection project
 
 ## 스프린트의 최종 목표
 
