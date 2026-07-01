@@ -216,7 +216,17 @@ __marimo__/
 
 # Streamlit
 
-#data/
+sprint_ai_project1_data/
 
 .streamlit/secrets.toml
 
+
+
+# Training outputs
+runs/
+weights/
+*.pt
+
+
+# VS Code
+.vscode/
