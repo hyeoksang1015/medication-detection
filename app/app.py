@@ -1,4 +1,4 @@
-import gc
+﻿import gc
 import os
 
 import cv2
@@ -211,7 +211,7 @@ with col_left:
     if uploaded_file is not None:
         uploaded_file.seek(0)
         raw_image = Image.open(uploaded_file).convert("RGB")
-        st.image(raw_image, caption="원본 이미지", use_container_width=True)
+        st.image(raw_image, caption="원본 이미지", width="stretch")
     else:
         st.info("👆 사진을 업로드하면 AI 탐지가 시작됩니다.")
 
@@ -301,7 +301,7 @@ with col_right:
 
         if detections:
             result_rgb = cv2.cvtColor(output_img, cv2.COLOR_BGR2RGB)
-            st.image(result_rgb, caption="AI 탐지 결과", use_container_width=True)
+            st.image(result_rgb, caption="AI 탐지 결과", width="stretch")
             st.success(f"🎉 총 {len(detections)}개의 알약을 탐지했습니다.")
         else:
             st.warning(
@@ -349,3 +349,4 @@ if detections:
         "💡 AI 탐지 결과는 참고용입니다. 실제 복용 여부는 반드시 약사·의사와 상담하거나 "
         "식품의약품안전처 의약품안전나라(nedrug.mfds.go.kr)에서 다시 확인해 주세요."
     )
+
