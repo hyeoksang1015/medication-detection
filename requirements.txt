@@ -1,7 +1,8 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 streamlit
+ultralytics==8.3.0
+opencv-python-headless==4.10.0.84
 pandas
 numpy
-opencv-python-headless
 Pillow
 torch
-ultralytics
