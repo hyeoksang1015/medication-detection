@@ -84,75 +84,11 @@ with st.sidebar:
     st.header("⚙️ 설정")
     model_path = st.text_input("모델 가중치 경로 (.pt)", value="best.pt")
     drug_info_path = st.text_input(
-        "의약품 정보 매핑 CSV 경로",
+        "의약품 추가정보 CSV 경로 (선택)",
         value="drug_info.csv",
-        help="컬럼: category_id, name, company, effect",
+        help="컬럼: name, company, effect · name은 모델의 클래스명과 정확히 일치해야 함",
     )
     conf_threshold = st.slider("신뢰도(confidence) 임계값", 0.05, 0.95, 0.25, 0.05)
-
-# 학습 시 사용한 것과 동일한 class index -> category_id(품목 코드) 매핑
-# (Colab 학습 스크립트의 sorted_cat_ids 그대로)
-SORTED_CAT_IDS = sorted(
-    [
-        1900,
-        2483,
-        3351,
-        3483,
-        3544,
-        4543,
-        12081,
-        12247,
-        12778,
-        13395,
-        13900,
-        16232,
-        16262,
-        16548,
-        16551,
-        16688,
-        18147,
-        18357,
-        19232,
-        19552,
-        19607,
-        19861,
-        20014,
-        20238,
-        20877,
-        21325,
-        21771,
-        22074,
-        22347,
-        22362,
-        24850,
-        25367,
-        25438,
-        25469,
-        27733,
-        27777,
-        27926,
-        27993,
-        28763,
-        29345,
-        29451,
-        29667,
-        30308,
-        31863,
-        31885,
-        32310,
-        33009,
-        33208,
-        33880,
-        34597,
-        35206,
-        36637,
-        38162,
-        41768,
-        3832,
-        3743,
-    ]
-)
-IDX_TO_CAT_ID = {idx: cat_id for idx, cat_id in enumerate(SORTED_CAT_IDS)}
 
 # 학습 시 사용한 전처리(패딩 후 리사이즈)와 동일하게 맞춰야 결과가 정확함
 PAD_SIZE = 1280
@@ -166,11 +102,12 @@ def load_model(path: str):
 
 @st.cache_data
 def load_drug_info(path: str):
+    """선택적 보조 정보(제조사/효능). 없으면 None 반환 - 약 이름 자체는
+    모델에 내장된 클래스명을 그대로 사용하므로 이 파일이 없어도 핵심 기능엔 문제없음."""
     if not os.path.exists(path):
         return None
     df = pd.read_csv(path)
-    df["category_id"] = df["category_id"].astype(int)
-    return df.set_index("category_id").to_dict(orient="index")
+    return df.set_index("name").to_dict(orient="index")
 
 
 # ------------------------------------------------------------------
@@ -193,8 +130,8 @@ if model_load_error:
 
 if drug_info is None:
     st.info(
-        f"ℹ️ 의약품 상세정보 매핑 파일을 찾지 못했습니다 (`{drug_info_path}`). "
-        "탐지는 정상 동작하지만 약 이름/제조사/효능 대신 품목 코드만 표시됩니다."
+        f"ℹ️ 의약품 추가정보 파일을 찾지 못했습니다 (`{drug_info_path}`). "
+        "탐지 및 약 이름 표시는 정상 동작하며, 제조사/효능만 표시되지 않습니다."
     )
 
 # ------------------------------------------------------------------
@@ -268,7 +205,8 @@ with col_right:
                 if x2 - x1 <= 0 or y2 - y1 <= 0:
                     continue
 
-                category_id = IDX_TO_CAT_ID.get(cls_idx)
+                # 모델에 내장된 실제 클래스명(약 이름)을 직접 사용
+                drug_name = model.names.get(cls_idx, f"알 수 없는 클래스 ({cls_idx})")
                 det_id = len(detections) + 1
 
                 cv2.rectangle(
@@ -289,7 +227,7 @@ with col_right:
                     {
                         "id": det_id,
                         "cls_idx": cls_idx,
-                        "category_id": category_id,
+                        "drug_name": drug_name,
                         "conf": conf,
                     }
                 )
@@ -326,22 +264,21 @@ if detections:
     )
 
     for det in detections:
-        info = drug_info.get(det["category_id"]) if drug_info else None
-        title = f"[알약 {det['id']}] 신뢰도 {det['conf'] * 100:.1f}%"
+        info = drug_info.get(det["drug_name"]) if drug_info else None
+        title = f"[알약 {det['id']}] {det['drug_name']} · 신뢰도 {det['conf'] * 100:.1f}%"
         with st.expander(title, expanded=True):
             col1, col2 = st.columns(2)
             with col1:
+                st.markdown(f"**💊 의약품명 (모델 예측):** {det['drug_name']}")
                 st.markdown(f"**분류 클래스 인덱스:** {det['cls_idx']}")
-                st.markdown(f"**품목 코드(category_id):** {det['category_id']}")
             with col2:
                 if info:
-                    st.markdown(f"**💊 의약품명:** {info.get('name', '-')}")
                     st.markdown(f"**🏢 제조사:** {info.get('company', '-')}")
                     st.markdown(f"**🎯 효능:** {info.get('effect', '-')}")
                 else:
                     st.markdown(
-                        "**상세 정보:** 매핑 데이터 없음 "
-                        f"(`{drug_info_path}`에 category_id `{det['category_id']}` 행 추가 필요)"
+                        "**추가 정보:** 제조사/효능 정보 없음 "
+                        f"(`{drug_info_path}`에 `{det['drug_name']}` 행을 추가하면 표시됩니다)"
                     )
 
     st.markdown("---")
@@ -349,4 +286,3 @@ if detections:
         "💡 AI 탐지 결과는 참고용입니다. 실제 복용 여부는 반드시 약사·의사와 상담하거나 "
         "식품의약품안전처 의약품안전나라(nedrug.mfds.go.kr)에서 다시 확인해 주세요."
     )
-
