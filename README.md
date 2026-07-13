@@ -81,3 +81,13 @@ https://docs.google.com/spreadsheets/d/1NocuXwYy9Iza1_G1YpYBtd3oT0mFwcIay8Yu1-Ec
 ## 프로젝트 계획서 링크
 
 https://app.notion.com/p/38b7c483db0c80a1bc3ddc5eeabee43f?source=copy_link
+
+## 협업일지
+
+다혜 https://app.notion.com/p/38de155860d080d685eee31489fd955a?source=copy_link
+
+민식 https://www.notion.so/38f71fde206b805a8905e19ad9cc686d?source=copy_link
+
+순균 https://app.notion.com/p/ai-38fbfd6acdce80d3bd81d60bb89c35f9?source=copy_link
+
+혁상 https://app.notion.com/p/395a15136d7e809a8693deb2d9703464?source=copy_link
