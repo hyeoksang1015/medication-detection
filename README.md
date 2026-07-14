@@ -92,6 +92,8 @@ https://app.notion.com/p/38b7c483db0c80a1bc3ddc5eeabee43f?source=copy_link
 
 혁상 https://app.notion.com/p/395a15136d7e809a8693deb2d9703464?source=copy_link
 
+하루 https://app.notion.com/p/39da720ee85080baa562d452373723c0?source=copy_link
+
 ## 보고서 ( 발표 자료 )
 
 https://www.miricanvas.com/v2/ko/design2/08e038fa-a105-4214-81cd-9efb7a00c867?sheetW=MTkyMA%3D%3D&sheetH=MTA4MA%3D%3D&templateTypeId=cHJlc2VudGF0aW9u&templateIdx=NjU2Njgx&templatePurpose=V0VC&sizeUnit=UFg%3D&dpi=OTY%3D
